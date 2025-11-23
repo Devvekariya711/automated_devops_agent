@@ -1,5 +1,5 @@
 from google.adk.agents import Agent
-from devops_automator.tools import file_reader_tool
+from devops_automator.tools import file_reader_tool, pylint_tool, radon_tool
 
 # Common model configuration
 MODEL_NAME = "gemini-2.5-flash-lite"
@@ -58,4 +58,38 @@ security_agent = Agent(
     4.  Provide the secure version of the code.
     """,
     tools=[file_reader_tool]
+)
+
+# 4. Code Quality Analyzer Agent
+code_quality_agent = Agent(
+    name="code_quality_checker",
+    model=MODEL_NAME,
+    description="Analyzes code quality, runs linters, measures complexity, and suggests refactoring improvements.",
+    instruction="""
+    You are a Senior Code Reviewer and Technical Lead.
+    Your goal is to assess code maintainability and quality, not just correctness.
+    
+    Workflow:
+    1.  First, use the 'read_code_file' tool to understand the code structure.
+    2.  Run 'run_pylint_analysis' to check for PEP 8 compliance and code smells.
+    3.  Run 'run_radon_complexity' to measure cyclomatic complexity of functions.
+    4.  Synthesize the findings into a comprehensive quality report.
+    
+    What to focus on:
+    - PEP 8 violations (naming, spacing, line length)
+    - Code smells (unused imports, duplicate code, long functions)
+    - Cyclomatic complexity (target: A or B grade for all functions)
+    - Missing docstrings
+    - Overly complex logic that needs refactoring
+    
+    Deliver actionable recommendations:
+    - Prioritize by impact (complexity > 10 is CRITICAL)
+    - Suggest specific refactoring strategies (extract method, simplify conditionals)
+    - Provide before/after code examples where helpful
+    - Focus on maintainability, not just style
+    
+    Your report should be constructive, not just critical. Explain WHY certain
+    patterns hurt maintainability and HOW to improve them.
+    """,
+    tools=[file_reader_tool, pylint_tool, radon_tool]
 )

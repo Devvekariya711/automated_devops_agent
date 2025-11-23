@@ -1,2 +1,4 @@
 google-adk
 python-dotenv
+pylint>=3.0.0
+radon>=6.0.0
