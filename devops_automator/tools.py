@@ -224,3 +224,161 @@ def run_radon_complexity(file_path: str) -> str:
 file_reader_tool = FunctionTool(func=read_code_file)
 pylint_tool = FunctionTool(func=run_pylint_analysis)
 radon_tool = FunctionTool(func=run_radon_complexity)
+
+
+def aggregate_reports(security_report: str, quality_report: str, test_coverage_notes: str = "") -> str:
+    """
+    Combines multiple specialist reports into a unified comprehensive audit.
+    
+    This tool aggregates findings from security, quality, and testing agents
+    into a single prioritized report for code reviews and PR audits.
+    
+    Args:
+        security_report: Output from security_scanner agent
+        quality_report: Output from code_quality_checker agent  
+        test_coverage_notes: Notes about test coverage from unit_test_generator
+    
+    Returns:
+        str: Formatted comprehensive report with prioritized findings and
+             overall recommendation (APPROVE / CONDITIONAL / REJECT)
+    
+    Examples:
+        >>> report = aggregate_reports(sec_report, qual_report, test_notes)
+        >>> print(report)
+        ============================================================
+        COMPREHENSIVE CODE AUDIT REPORT
+        ...
+    """
+    import re
+    
+    # Parse severity from each report
+    critical_issues = []
+    warnings = []
+    suggestions = []
+    
+    # Extract from security report
+    if security_report and ("Critical" in security_report or "High" in security_report or "SQL" in security_report or "injection" in security_report.lower()):
+        # Extract critical security issues
+        for line in security_report.split('\n'):
+            if any(word in line.lower() for word in ['sql injection', 'xss', 'critical', 'high severity']):
+                critical_issues.append(f"🔴 SECURITY: {line.strip()}")
+                break
+        else:
+            critical_issues.append("🔴 SECURITY: Critical vulnerabilities detected - see detailed report")
+    
+    # Extract from quality report
+    if quality_report:
+        # Check for low scores
+        score_match = re.search(r'(\d+\.?\d*)/10', quality_report)
+        if score_match:
+            score = float(score_match.group(1))
+            if score < 5.0:
+                critical_issues.append(f"🔴 QUALITY: Very low code quality score ({score}/10)")
+            elif score < 7.0:
+                warnings.append(f"⚠️ QUALITY: Below-average code quality score ({score}/10)")
+        
+        # Check for complexity
+        if "Grade: F" in quality_report or "Grade F" in quality_report:
+            critical_issues.append("🔴 QUALITY: Extremely complex code detected (Grade F)")
+        elif "Grade: D" in quality_report or "Grade D" in quality_report:
+            warnings.append("⚠️ QUALITY: Very complex code (Grade D) - refactoring recommended")
+        elif "Grade: C" in quality_report or "Grade C" in quality_report:
+            suggestions.append("💡 QUALITY: Moderate complexity (Grade C) - consider simplification")
+    
+    # Extract from test coverage
+    if test_coverage_notes:
+        coverage_match = re.search(r'(\d+)%', test_coverage_notes)
+        if coverage_match:
+            coverage = int(coverage_match.group(1))
+            if coverage < 50:
+                critical_issues.append(f"🔴 TESTING: Very low test coverage ({coverage}%)")
+            elif coverage < 80:
+                warnings.append(f"⚠️ TESTING: Insufficient test coverage ({coverage}%)")
+            else:
+                suggestions.append(f"✅ TESTING: Good test coverage ({coverage}%)")
+    
+    # Build unified report
+    report = "=" * 70 + "\n"
+    report += "           COMPREHENSIVE CODE AUDIT REPORT\n"
+    report += "=" * 70 + "\n\n"
+    
+    # Executive Summary
+    report += "EXECUTIVE SUMMARY:\n"
+    report += "-" * 70 + "\n"
+    
+    if critical_issues:
+        report += "🚨 CRITICAL ISSUES FOUND - MUST FIX BEFORE MERGE:\n"
+        for issue in critical_issues:
+            report += f"   {issue}\n"
+        report += "\n"
+    
+    if warnings:
+        report += "⚠️  WARNINGS - SHOULD ADDRESS:\n"
+        for warn in warnings:
+            report += f"   {warn}\n"
+        report += "\n"
+    
+    if suggestions and not critical_issues:
+        report += "💡 SUGGESTIONS FOR IMPROVEMENT:\n"
+        for sugg in suggestions:
+            report += f"   {sugg}\n"
+        report += "\n"
+    
+    if not critical_issues and not warnings:
+        report += "✅ No critical issues or warnings detected\n\n"
+    
+    # Detailed Sections
+    report += "=" * 70 + "\n"
+    report += "DETAILED ANALYSIS:\n"
+    report += "=" * 70 + "\n\n"
+    
+    report += "━" * 70 + "\n"
+    report += "1. SECURITY ANALYSIS:\n"
+    report += "━" * 70 + "\n"
+    if security_report:
+        report += security_report + "\n\n"
+    else:
+        report += "No security scan results provided.\n\n"
+    
+    report += "━" * 70 + "\n"
+    report += "2. CODE QUALITY ANALYSIS:\n"
+    report += "━" * 70 + "\n"
+    if quality_report:
+        report += quality_report + "\n\n"
+    else:
+        report += "No quality analysis results provided.\n\n"
+    
+    report += "━" * 70 + "\n"
+    report += "3. TEST COVERAGE ANALYSIS:\n"
+    report += "━" * 70 + "\n"
+    if test_coverage_notes:
+        report += test_coverage_notes + "\n\n"
+    else:
+        report += "No test coverage analysis provided.\n\n"
+    
+    # Final Recommendation
+    report += "=" * 70 + "\n"
+    report += "FINAL RECOMMENDATION:\n"
+    report += "=" * 70 + "\n"
+    
+    if critical_issues:
+        report += "❌ REJECT - DO NOT MERGE\n"
+        report += "   Critical issues must be resolved before this code can be merged.\n"
+        report += f"   Found {len(critical_issues)} critical issue(s) requiring immediate attention.\n"
+    elif warnings:
+        report += "⚠️  CONDITIONAL APPROVAL\n"
+        report += "   Code can be merged after addressing the warnings above.\n"
+        report += f"   Found {len(warnings)} warning(s) that should be addressed.\n"
+    else:
+        report += "✅ APPROVED FOR MERGE\n"
+        report += "   Code meets quality standards and security requirements.\n"
+        if suggestions:
+            report += f"   Consider implementing {len(suggestions)} suggestion(s) for further improvement.\n"
+    
+    report += "=" * 70 + "\n"
+    
+    return report
+
+
+# Wrap aggregate function as ADK tool
+aggregate_reports_tool = FunctionTool(func=aggregate_reports)
