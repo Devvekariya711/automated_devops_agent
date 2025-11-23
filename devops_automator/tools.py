@@ -38,7 +38,7 @@ def read_code_file(file_path: str) -> str:
 
     try:
         # Convert to absolute path and validate it's within project
-        base_dir = os.path.abspath(os.path.dirname(__file__))
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         requested_path = os.path.abspath(file_path)
         
         # Check if the path is within the project directory
