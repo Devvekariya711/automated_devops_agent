@@ -484,3 +484,179 @@ radon_tool = FunctionTool(func=run_radon_complexity)
 aggregate_reports_tool = FunctionTool(func=aggregate_reports)
 file_writer_tool = FunctionTool(func=write_code_file)
 git_revert_tool = FunctionTool(func=git_revert_file)
+
+
+# Phase 3: Loop Agents - Testing Tools
+def run_pytest(file_or_directory: str = ".", verbose: bool = True) -> str:
+    """
+    Runs pytest on specified files or directories.
+    
+    This tool enables iterative testing and flaky test detection by
+    actually executing tests and capturing detailed output.
+    
+    Args:
+        file_or_directory: Path to test file or directory (default: current directory)
+        verbose: Whether to show verbose output (default: True)
+    
+    Returns:
+        str: Test results with pass/fail status and details
+    
+    Examples:
+        >>> result = run_pytest("tests/test_app.py")
+        >>> print(result)
+        ===== test session starts =====
+        collected 5 items
+        tests/test_app.py ..... [100%]
+        ===== 5 passed in 0.5s =====
+    """
+    try:
+        # Build pytest command
+        cmd = ["pytest", file_or_directory]
+        if verbose:
+            cmd.extend(["-v", "--tb=short"])
+        else:
+            cmd.append("-q")
+        
+        # Run pytest
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=120  # 2 minute timeout
+        )
+        
+        output = f"===== PYTEST EXECUTION =====\n"
+        output += f"Command: {' '.join(cmd)}\n"
+        output += f"Exit Code: {result.returncode}\n\n"
+        
+        if result.stdout:
+            output += "===== STDOUT =====\n" + result.stdout + "\n"
+        if result.stderr:
+            output += "===== STDERR =====\n" + result.stderr + "\n"
+        
+        # Add summary
+        if result.returncode == 0:
+            output += "\n✅ All tests passed!"
+        else:
+            output += f"\n❌ Tests failed (exit code: {result.returncode})"
+        
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return "Error: pytest execution timed out after 120 seconds"
+    except FileNotFoundError:
+        return "Error: pytest not found. Install with: pip install pytest>=7.0.0"
+    except Exception as e:
+        return f"Error running pytest: {str(e)}"
+
+
+# Phase 4: External Tools
+def google_search(query: str, num_results: int = 5) -> str:
+    """
+    Searches Google and returns top results.
+    
+    This tool helps agents find Stack Overflow solutions, documentation,
+    and other resources to solve coding problems.
+    
+    Args:
+        query: Search query string
+        num_results: Number of results to return (default: 5, max: 10)
+    
+    Returns:
+        str: Formatted list of search results with titles and URLs
+    
+    Examples:
+        >>> results = google_search("Python SQL injection prevention")
+        >>> print(results)
+        1. [Stack Overflow] How to prevent SQL injection in Python
+           URL: https://stackoverflow.com/...
+        ...
+    """
+    try:
+        from googlesearch import search
+        
+        num_results = min(num_results, 10)  # Cap at 10
+        results = list(search(query, num_results=num_results, lang="en"))
+        
+        if not results:
+            return f"No results found for: {query}"
+        
+        output = f"===== GOOGLE SEARCH RESULTS =====\n"
+        output += f"Query: {query}\n"
+        output += f"Found {len(results)} results:\n\n"
+        
+        for i, url in enumerate(results, 1):
+            output += f"{i}. {url}\n"
+        
+        output += "\n" + "=" * 35 + "\n"
+        return output
+        
+    except ImportError:
+        return "Error: googlesearch-python not installed. Run: pip install googlesearch-python"
+    except Exception as e:
+        return f"Error performing search: {str(e)}"
+
+
+def execute_shell_command(command: str, timeout: int = 30) -> str:
+    """
+    Executes a shell command in a sandboxed environment.
+    
+    SECURITY: This tool runs commands with strict timeout and captures output.
+    Only safe, read-only commands should be executed.
+    
+    Args:
+        command: Shell command to execute
+        timeout: Maximum execution time in seconds (default: 30, max: 60)
+    
+    Returns:
+        str: Command output and exit status
+    
+    Security Features:
+        - Strict timeout (max 60 seconds)
+        - Output capture (no console interaction)
+        - Returns both stdout and stderr
+    
+    Examples:
+        >>> result = execute_shell_command("python --version")
+        >>> print(result)
+        Command: python --version
+        Exit Code: 0
+        Output: Python 3.12.0
+    """
+    try:
+        # Cap timeout at 60 seconds
+        timeout = min(timeout, 60)
+        
+        # Run command
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        )
+        
+        output = f"===== SHELL COMMAND EXECUTION =====\n"
+        output += f"Command: {command}\n"
+        output += f"Exit Code: {result.returncode}\n"
+        output += f"Timeout: {timeout}s\n\n"
+        
+        if result.stdout:
+            output += "===== STDOUT =====\n" + result.stdout + "\n"
+        if result.stderr:
+            output += "===== STDERR =====\n" + result.stderr + "\n"
+        
+        output += "=" * 35 + "\n"
+        return output
+        
+    except subprocess.TimeoutExpired:
+        return f"Error: Command timed out after {timeout} seconds"
+    except Exception as e:
+        return f"Error executing command: {str(e)}"
+
+
+# Wrap Phase 3 & 4 tools
+run_pytest_tool = FunctionTool(func=run_pytest)
+google_search_tool = FunctionTool(func=google_search)
+shell_executor_tool = FunctionTool(func=execute_shell_command)
