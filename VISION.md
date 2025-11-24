@@ -283,12 +283,12 @@ THE CYCLE CONTINUES 🔄
 
 ### Our Goals by 2025
 
-| Metric | Target | Impact |
-|--------|--------|--------|
-| Active Users | 100,000 | 100K developers saving time |
-| Bugs Prevented | 10 million | Massive quality improvement |
-| Cost Saved | $100 million | Real economic value |
-| Security Fixes | 1 million | Safer internet for all |
+| Metric         | Target         | Impact                           |
+| -------------- | -------------- | -------------------------------- |
+| Active Users   | 100,000        | 100K developers saving time      |
+| Bugs Prevented | 10 million     | Massive quality improvement      |
+| Cost Saved     | $100 million   | Real economic value              |
+| Security Fixes | 1 million      | Safer internet for all           |
 
 ---
 

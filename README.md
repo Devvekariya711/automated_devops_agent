@@ -147,12 +147,12 @@ Output: 🔄 Attempt 1: Found division by zero → Fixed
 
 ## 🎨 The 4 Specialist Agents
 
-| Agent | Role | Tools | Output |
-|-------|------|-------|--------|
-| 🔒 **Security** | Finds vulnerabilities | OWASP Top 10 scanner | Critical/High/Medium/Low issues |
-| 📊 **Quality** | Code review | Pylint + Radon | Score + complexity grades |
-| 🧪 **Testing** | Test generation | Coverage analyzer | Pytest test files |
-| 🐛 **Debugging** | Bug fixing | pytest + Google Search | Fixed code + test results |
+| Agent           | Role                    | Tools                 | Output                            |
+| ----------------| ----------------------- | --------------------- | --------------------------------- |
+| 🔒 **Security** | Finds vulnerabilities   | OWASP Top 10 scanner  | Critical/High/Medium/Low issues   |
+| 📊 **Quality**  | Code review             | Pylint + Radon        | Score + complexity grades         |
+| 🧪 **Testing**  | Test generation         | Coverage analyzer     | Pytest test files                 |
+| 🐛 **Debugging**| Bug fixing              | pytest + Google Search| Fixed code + test results         |
 
 ---
 
@@ -193,11 +193,11 @@ By Agent:
 
 ### Evaluation Results (100% Scores!)
 
-| Metric | Security Agent | Quality Agent | Overall |
-|--------|---------------|---------------|---------|
-| **Precision** | 100% | 100% | 100% ✅ |
-| **Recall** | 100% | 100% | 100% ✅ |
-| **F1 Score** | 1.000 | 1.000 | 1.000 ✅ |
+| Metric       | Security Agent | Quality Agent | Overall |
+|--------------|----------------|---------------|---------|
+| **Precision**| 100%           | 100%          | 100%    |
+| **Recall**   | 100%           | 100%          | 100%    |
+| **F1 Score** | 1.000          | 1.000         | 1.000   |
 
 **Translation:** The agents catch EVERY bug without false positives!
 
@@ -268,9 +268,9 @@ cat logs/agent_activity.jsonl
 
 ```
 Without Agent:              With Agent:
-━━━━━━━━━━━━━━━            ━━━━━━━━━━━━━━━
-Manual review: 2 hours      Auto review: 30 seconds ⚡
-Miss 30% of bugs 🐛        Catch 100% of bugs ✅
+━━━━━━━━━━━━━━━━━━━━━━━     ━━━━━━━━━━━━━━━━━━━━━━
+Manual review: 2 hours      Auto review: 30 seconds⚡
+Miss 30% of bugs 🐛         Catch 100% of bugs ✅
 Inconsistent standards      Perfect consistency 📊
 Developer fatigue 😴        Fresh AI every time 🤖
 ```
