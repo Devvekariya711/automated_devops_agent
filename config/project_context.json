@@ -1,0 +1,51 @@
+{
+  "project_name": "automated_devops_agent",
+  "last_updated": "2024-11-24T21:53:00+05:30",
+  "tech_stack": [
+    "Python",
+    "Google ADK",
+    "pytest",
+    "pylint",
+    "radon",
+    "PyGithub"
+  ],
+  "key_files": {
+    "agent.py": "Root orchestrator agent (DevOps Lead)",
+    "supporting_agents.py": "Specialist agents (Test, Debug, Security, Quality)",
+    "tools.py": "All agent tools including memory, GitHub API, testing",
+    "pipelines.py": "RefactoringPipeline and IterativeDebugger classes"
+  },
+  "learnings": [
+    {
+      "timestamp": "2024-11-24T20:00:00+05:30",
+      "category": "pattern",
+      "description": "Parallel agent consultation pattern implemented in Phase 1",
+      "solution": "Root agent consults security, quality, and test agents simultaneously, then aggregates reports"
+    },
+    {
+      "timestamp": "2024-11-24T20:30:00+05:30",
+      "category": "pattern",
+      "description": "Sequential workflow pattern with automated rollback",
+      "solution": "RefactoringPipeline: analyze → backup → refactor → test → commit/rollback"
+    },
+    {
+      "timestamp": "2024-11-24T21:00:00+05:30",
+      "category": "pattern",
+      "description": "Iterative debugging with retry loop (max 5 attempts)",
+      "solution": "IterativeDebugger runs tests, analyzes errors, searches solutions, applies fixes iteratively"
+    }
+  ],
+  "common_patterns": {
+    "test_location": "tests/",
+    "fixture_location": "tests/fixtures/",
+    "main_module": "devops_automator/",
+    "agent_model": "gemini-2.5-flash-lite"
+  },
+  "preferences": {
+    "max_retries": 5,
+    "test_framework": "pytest",
+    "linter": "pylint",
+    "complexity_tool": "radon",
+    "git_enabled": true
+  }
+}

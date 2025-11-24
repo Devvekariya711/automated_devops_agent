@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-11-24T22:35:24.937663",
+  "benchmarks": {
+    "security": {
+      "benchmark": "SQL Injection Detection",
+      "known_issues": {
+        "sql_injection": 3,
+        "hardcoded_credentials": 1,
+        "total": 4
+      },
+      "detected_issues": {
+        "sql_injection": 3,
+        "hardcoded_credentials": 1,
+        "total_detected": 4
+      },
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0
+      }
+    },
+    "quality": {
+      "benchmark": "Code Complexity Detection",
+      "known_issues": {
+        "high_complexity": 1,
+        "total": 1
+      },
+      "detected_issues": {
+        "high_complexity": 1,
+        "total_detected": 1
+      },
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0
+      }
+    }
+  },
+  "overall_metrics": {
+    "average_precision": 1.0,
+    "average_recall": 1.0,
+    "average_f1_score": 1.0
+  }
+}
