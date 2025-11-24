@@ -48,6 +48,8 @@ graph TB
     style K fill:#d4edda
 ```
 
+![Workflow Diagram](images/workflow_diagram.png)
+
 ---
 
 ## ✨ Key Features (At a Glance)
@@ -274,6 +276,8 @@ Miss 30% of bugs 🐛         Catch 100% of bugs ✅
 Inconsistent standards      Perfect consistency 📊
 Developer fatigue 😴        Fresh AI every time 🤖
 ```
+
+![Before vs After Comparison](images/before_after.png)
 
 ---
 

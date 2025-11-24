@@ -34,6 +34,8 @@ Developer writes code → AI agents review (30 seconds) → 100% bug detection �
            Same workflow      4 AI specialists        Catch everything    Sleep soundly
 ```
 
+![AI Solution Overview](images/solution_overview.png)
+
 ---
 
 ## 💪 Impact on Different Groups
@@ -83,6 +85,8 @@ Security Issues:    -95%      (Caught before merge)
 Onboarding Speed:   2x faster (Junior devs learn faster)
 ```
 
+![Team Impact Dashboard](images/impact_dashboard.png)
+
 ---
 
 ### 3. Companies & Startups 🏢
@@ -106,6 +110,8 @@ Production Bugs:    -90%          (Massive stability improvement)
 Time to Market:     -50%          (Ship features faster)
 Security Audit:     $0            (Automated & continuous)
 ```
+
+![ROI Calculation](images/roi_calculation.png)
 
 ---
 
@@ -245,6 +251,8 @@ They use the tool...
     ↓
 THE CYCLE CONTINUES 🔄
 ```
+
+![Global Ripple Effect](images/ripple_effect.png)
 
 **If 1% of developers worldwide use this:**
 - 260,000 developers
