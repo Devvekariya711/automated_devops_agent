@@ -21,7 +21,7 @@ Imagine having **4 expert developers** working 24/7 to:
 ---
 
 ## 🏗️ How It Works (Visual Flow)
-
+<!-- 
 ```mermaid
 graph TB
     A[👤 You] -->|"Review my code"| B[🤖 DevOps Lead Agent]
@@ -46,7 +46,7 @@ graph TB
     style A fill:#e1f5ff
     style B fill:#fff3cd
     style K fill:#d4edda
-```
+``` -->
 
 ![Workflow Diagram](images/workflow_diagram.png)
 
@@ -54,7 +54,7 @@ graph TB
 
 ## ✨ Key Features (At a Glance)
 
-| Feature | What It Does | Emoji |
+| Feature | What It Does |      |
 |---------|-------------|-------|
 | **Parallel Processing** | All 4 agents work simultaneously | ⚡ |
 | **Security Scanning** | Finds SQL injection, XSS, hardcoded secrets | 🔒 |

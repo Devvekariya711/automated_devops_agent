@@ -1,107 +1,107 @@
-unit_test_agent = Agent(
-    name="unit_test_generator",
-    model=MODEL_NAME,
-    description="Reads code and generates comprehensive unit tests (pytest/unittest).",
-    2. Use 'read_code_file' to examine the problematic code
-    3. Analyze the root cause
-    4. **IF UNCLEAR**: Use 'google_search_tool' to search for similar errors on Stack Overflow
-    5. **IF TESTS AVAILABLE**: Use 'run_pytest_tool' to validate your hypothesis
-    6. **IF FIX APPLIED**: Re-run tests to confirm the fix worked
-    
-    RETRY LOGIC:
-    - If first fix attempt fails, analyze the new error
-    - Try 2-3 different approaches (max 3 attempts)
-    - Each iteration: Diagnose â†’ Search (if needed) â†’ Propose Fix â†’ Test
-    
-    IMPORTANT: Always return a clear summary of your findings to the delegating agent.
-    
-    Output Format:
-    - Attempt #: [1/2/3]
-    - Root Cause: [Explanation]
-    - Fix Applied: [Code snippet or approach]
-    - Test Result: [Pass/Fail]
-    
-    Tools: read_code_file, run_pytest_tool, google_search_tool, shell_executor_tool
-    """,
-    tools=[file_reader_tool, run_pytest_tool, google_search_tool, shell_executor_tool]
-)
-
-# Security Scanner Agent  
-security_agent = Agent(
-    name="security_scanner",
-    model=MODEL_NAME,
-    description="Scans code for security vulnerabilities (OWASP Top 10) and suggests remediation.",
-    instruction="""
-    You are a Cyber Security Analyst.
-    Your goal is to audit code for security risks.
-    
-    WORKFLOW:
-    1. Use 'read_code_file' to scan the target file
-    2. Identify vulnerabilities:
-       - SQL Injection
-       - Hardcoded API Keys/Secrets
-       - Cross-Site Scripting (XSS)
-       - Insecure imports or execution
-    3. For every issue found, classify Severity (Critical/High/Medium/Low)
-    4. Provide secure code examples
-    
-    CRITICAL: You MUST return your security analysis as a formatted report to the delegating agent.
-    
-    RESPONSE FORMAT (REQUIRED):
-    Security Scan Results for [filename]:
-    ========================================
-    
-    CRITICAL VULNERABILITIES:
-    1. [Vulnerability Type] at line [X]: [Description]
-       Severity: Critical
-       Fix: [Code example]
-    
-    RECOMMENDATIONS:
-    - [Actionable recommendation 1]
-    - [Actionable recommendation 2]
-    
-    Always end with a clear summary of findings.
-    """,
-    tools=[file_reader_tool]
-)
-
-# Code Quality Agent
-code_quality_agent = Agent(
-    name="code_quality_checker",
-    model=MODEL_NAME,
-    description="Analyzes code quality, runs linters, measures complexity, and suggests refactoring.",
-    instruction="""
-    You are a Senior Code Reviewer / Technical Lead.
-    Your goal is to assess code quality and maintainability.
-    
-    WORKFLOW:
-    1. Use 'read_code_file' to inspect the target file
-    2. Use 'run_pylint_analysis' to check PEP 8 compliance
-    3. Use 'run_radon_complexity' to measure cyclomatic complexity
-    4. Synthesize findings into quality report
-    
-    CRITICAL: You MUST return your quality analysis as a formatted report to the delegating agent.
-    
-    RESPONSE FORMAT (REQUIRED):
-    Code Quality Report for [filename]:
-    ====================================
-    
-    PYLINT SCORE: X.X/10
-    
-    COMPLEXITY ANALYSIS:
-    - Function '[name]': Grade [A-F], Complexity [N]
-    
-    KEY ISSUES:
-    1. [Issue description]
-    2. [Issue description]
-    
-    RECOMMENDATIONS:
-    - [Specific actionable improvement]
-    - [Specific actionable improvement]
-    
-    SUMMARY: [Overall assessment in 1-2 sentences]
-    
-    Always provide this complete report - the root agent needs it for comprehensive audits.
-    """,
-    tools=[file_reader_tool, pylint_tool, radon_tool]
-)
+->u->n->i->t->_->t->e->s->t->_->a->g->e->n->t-> ->=-> ->A->g->e->n->t->(->->
+-> -> -> -> ->n->a->m->e->=->"->u->n->i->t->_->t->e->s->t->_->g->e->n->e->r->a->t->o->r->"->,->->
+-> -> -> -> ->m->o->d->e->l->=->M->O->D->E->L->_->N->A->M->E->,->->
+-> -> -> -> ->d->e->s->c->r->i->p->t->i->o->n->=->"->R->e->a->d->s-> ->c->o->d->e-> ->a->n->d-> ->g->e->n->e->r->a->t->e->s-> ->c->o->m->p->r->e->h->e->n->s->i->v->e-> ->u->n->i->t-> ->t->e->s->t->s-> ->(->p->y->t->e->s->t->/->u->n->i->t->t->e->s->t->)->.->"->,->->
+-> -> -> -> ->2->.-> ->U->s->e-> ->'->r->e->a->d->_->c->o->d->e->_->f->i->l->e->'-> ->t->o-> ->e->x->a->m->i->n->e-> ->t->h->e-> ->p->r->o->b->l->e->m->a->t->i->c-> ->c->o->d->e->->
+-> -> -> -> ->3->.-> ->A->n->a->l->y->z->e-> ->t->h->e-> ->r->o->o->t-> ->c->a->u->s->e->->
+-> -> -> -> ->4->.-> ->*->*->I->F-> ->U->N->C->L->E->A->R->*->*->:-> ->U->s->e-> ->'->g->o->o->g->l->e->_->s->e->a->r->c->h->_->t->o->o->l->'-> ->t->o-> ->s->e->a->r->c->h-> ->f->o->r-> ->s->i->m->i->l->a->r-> ->e->r->r->o->r->s-> ->o->n-> ->S->t->a->c->k-> ->O->v->e->r->f->l->o->w->->
+-> -> -> -> ->5->.-> ->*->*->I->F-> ->T->E->S->T->S-> ->A->V->A->I->L->A->B->L->E->*->*->:-> ->U->s->e-> ->'->r->u->n->_->p->y->t->e->s->t->_->t->o->o->l->'-> ->t->o-> ->v->a->l->i->d->a->t->e-> ->y->o->u->r-> ->h->y->p->o->t->h->e->s->i->s->->
+-> -> -> -> ->6->.-> ->*->*->I->F-> ->F->I->X-> ->A->P->P->L->I->E->D->*->*->:-> ->R->e->-->r->u->n-> ->t->e->s->t->s-> ->t->o-> ->c->o->n->f->i->r->m-> ->t->h->e-> ->f->i->x-> ->w->o->r->k->e->d->->
+-> -> -> -> ->->
+-> -> -> -> ->R->E->T->R->Y-> ->L->O->G->I->C->:->->
+-> -> -> -> ->--> ->I->f-> ->f->i->r->s->t-> ->f->i->x-> ->a->t->t->e->m->p->t-> ->f->a->i->l->s->,-> ->a->n->a->l->y->z->e-> ->t->h->e-> ->n->e->w-> ->e->r->r->o->r->->
+-> -> -> -> ->--> ->T->r->y-> ->2->-->3-> ->d->i->f->f->e->r->e->n->t-> ->a->p->p->r->o->a->c->h->e->s-> ->(->m->a->x-> ->3-> ->a->t->t->e->m->p->t->s->)->->
+-> -> -> -> ->--> ->E->a->c->h-> ->i->t->e->r->a->t->i->o->n->:-> ->D->i->a->g->n->o->s->e-> ->â->†->’-> ->S->e->a->r->c->h-> ->(->i->f-> ->n->e->e->d->e->d->)-> ->â->†->’-> ->P->r->o->p->o->s->e-> ->F->i->x-> ->â->†->’-> ->T->e->s->t->->
+-> -> -> -> ->->
+-> -> -> -> ->I->M->P->O->R->T->A->N->T->:-> ->A->l->w->a->y->s-> ->r->e->t->u->r->n-> ->a-> ->c->l->e->a->r-> ->s->u->m->m->a->r->y-> ->o->f-> ->y->o->u->r-> ->f->i->n->d->i->n->g->s-> ->t->o-> ->t->h->e-> ->d->e->l->e->g->a->t->i->n->g-> ->a->g->e->n->t->.->->
+-> -> -> -> ->->
+-> -> -> -> ->O->u->t->p->u->t-> ->F->o->r->m->a->t->:->->
+-> -> -> -> ->--> ->A->t->t->e->m->p->t-> ->#->:-> ->[->1->/->2->/->3->]->->
+-> -> -> -> ->--> ->R->o->o->t-> ->C->a->u->s->e->:-> ->[->E->x->p->l->a->n->a->t->i->o->n->]->->
+-> -> -> -> ->--> ->F->i->x-> ->A->p->p->l->i->e->d->:-> ->[->C->o->d->e-> ->s->n->i->p->p->e->t-> ->o->r-> ->a->p->p->r->o->a->c->h->]->->
+-> -> -> -> ->--> ->T->e->s->t-> ->R->e->s->u->l->t->:-> ->[->P->a->s->s->/->F->a->i->l->]->->
+-> -> -> -> ->->
+-> -> -> -> ->T->o->o->l->s->:-> ->r->e->a->d->_->c->o->d->e->_->f->i->l->e->,-> ->r->u->n->_->p->y->t->e->s->t->_->t->o->o->l->,-> ->g->o->o->g->l->e->_->s->e->a->r->c->h->_->t->o->o->l->,-> ->s->h->e->l->l->_->e->x->e->c->u->t->o->r->_->t->o->o->l->->
+-> -> -> -> ->"->"->"->,->->
+-> -> -> -> ->t->o->o->l->s->=->[->f->i->l->e->_->r->e->a->d->e->r->_->t->o->o->l->,-> ->r->u->n->_->p->y->t->e->s->t->_->t->o->o->l->,-> ->g->o->o->g->l->e->_->s->e->a->r->c->h->_->t->o->o->l->,-> ->s->h->e->l->l->_->e->x->e->c->u->t->o->r->_->t->o->o->l->]->->
+->)->->
+->->
+->#-> ->S->e->c->u->r->i->t->y-> ->S->c->a->n->n->e->r-> ->A->g->e->n->t-> -> ->->
+->s->e->c->u->r->i->t->y->_->a->g->e->n->t-> ->=-> ->A->g->e->n->t->(->->
+-> -> -> -> ->n->a->m->e->=->"->s->e->c->u->r->i->t->y->_->s->c->a->n->n->e->r->"->,->->
+-> -> -> -> ->m->o->d->e->l->=->M->O->D->E->L->_->N->A->M->E->,->->
+-> -> -> -> ->d->e->s->c->r->i->p->t->i->o->n->=->"->S->c->a->n->s-> ->c->o->d->e-> ->f->o->r-> ->s->e->c->u->r->i->t->y-> ->v->u->l->n->e->r->a->b->i->l->i->t->i->e->s-> ->(->O->W->A->S->P-> ->T->o->p-> ->1->0->)-> ->a->n->d-> ->s->u->g->g->e->s->t->s-> ->r->e->m->e->d->i->a->t->i->o->n->.->"->,->->
+-> -> -> -> ->i->n->s->t->r->u->c->t->i->o->n->=->"->"->"->->
+-> -> -> -> ->Y->o->u-> ->a->r->e-> ->a-> ->C->y->b->e->r-> ->S->e->c->u->r->i->t->y-> ->A->n->a->l->y->s->t->.->->
+-> -> -> -> ->Y->o->u->r-> ->g->o->a->l-> ->i->s-> ->t->o-> ->a->u->d->i->t-> ->c->o->d->e-> ->f->o->r-> ->s->e->c->u->r->i->t->y-> ->r->i->s->k->s->.->->
+-> -> -> -> ->->
+-> -> -> -> ->W->O->R->K->F->L->O->W->:->->
+-> -> -> -> ->1->.-> ->U->s->e-> ->'->r->e->a->d->_->c->o->d->e->_->f->i->l->e->'-> ->t->o-> ->s->c->a->n-> ->t->h->e-> ->t->a->r->g->e->t-> ->f->i->l->e->->
+-> -> -> -> ->2->.-> ->I->d->e->n->t->i->f->y-> ->v->u->l->n->e->r->a->b->i->l->i->t->i->e->s->:->->
+-> -> -> -> -> -> -> ->--> ->S->Q->L-> ->I->n->j->e->c->t->i->o->n->->
+-> -> -> -> -> -> -> ->--> ->H->a->r->d->c->o->d->e->d-> ->A->P->I-> ->K->e->y->s->/->S->e->c->r->e->t->s->->
+-> -> -> -> -> -> -> ->--> ->C->r->o->s->s->-->S->i->t->e-> ->S->c->r->i->p->t->i->n->g-> ->(->X->S->S->)->->
+-> -> -> -> -> -> -> ->--> ->I->n->s->e->c->u->r->e-> ->i->m->p->o->r->t->s-> ->o->r-> ->e->x->e->c->u->t->i->o->n->->
+-> -> -> -> ->3->.-> ->F->o->r-> ->e->v->e->r->y-> ->i->s->s->u->e-> ->f->o->u->n->d->,-> ->c->l->a->s->s->i->f->y-> ->S->e->v->e->r->i->t->y-> ->(->C->r->i->t->i->c->a->l->/->H->i->g->h->/->M->e->d->i->u->m->/->L->o->w->)->->
+-> -> -> -> ->4->.-> ->P->r->o->v->i->d->e-> ->s->e->c->u->r->e-> ->c->o->d->e-> ->e->x->a->m->p->l->e->s->->
+-> -> -> -> ->->
+-> -> -> -> ->C->R->I->T->I->C->A->L->:-> ->Y->o->u-> ->M->U->S->T-> ->r->e->t->u->r->n-> ->y->o->u->r-> ->s->e->c->u->r->i->t->y-> ->a->n->a->l->y->s->i->s-> ->a->s-> ->a-> ->f->o->r->m->a->t->t->e->d-> ->r->e->p->o->r->t-> ->t->o-> ->t->h->e-> ->d->e->l->e->g->a->t->i->n->g-> ->a->g->e->n->t->.->->
+-> -> -> -> ->->
+-> -> -> -> ->R->E->S->P->O->N->S->E-> ->F->O->R->M->A->T-> ->(->R->E->Q->U->I->R->E->D->)->:->->
+-> -> -> -> ->S->e->c->u->r->i->t->y-> ->S->c->a->n-> ->R->e->s->u->l->t->s-> ->f->o->r-> ->[->f->i->l->e->n->a->m->e->]->:->->
+-> -> -> -> ->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->->
+-> -> -> -> ->->
+-> -> -> -> ->C->R->I->T->I->C->A->L-> ->V->U->L->N->E->R->A->B->I->L->I->T->I->E->S->:->->
+-> -> -> -> ->1->.-> ->[->V->u->l->n->e->r->a->b->i->l->i->t->y-> ->T->y->p->e->]-> ->a->t-> ->l->i->n->e-> ->[->X->]->:-> ->[->D->e->s->c->r->i->p->t->i->o->n->]->->
+-> -> -> -> -> -> -> ->S->e->v->e->r->i->t->y->:-> ->C->r->i->t->i->c->a->l->->
+-> -> -> -> -> -> -> ->F->i->x->:-> ->[->C->o->d->e-> ->e->x->a->m->p->l->e->]->->
+-> -> -> -> ->->
+-> -> -> -> ->R->E->C->O->M->M->E->N->D->A->T->I->O->N->S->:->->
+-> -> -> -> ->--> ->[->A->c->t->i->o->n->a->b->l->e-> ->r->e->c->o->m->m->e->n->d->a->t->i->o->n-> ->1->]->->
+-> -> -> -> ->--> ->[->A->c->t->i->o->n->a->b->l->e-> ->r->e->c->o->m->m->e->n->d->a->t->i->o->n-> ->2->]->->
+-> -> -> -> ->->
+-> -> -> -> ->A->l->w->a->y->s-> ->e->n->d-> ->w->i->t->h-> ->a-> ->c->l->e->a->r-> ->s->u->m->m->a->r->y-> ->o->f-> ->f->i->n->d->i->n->g->s->.->->
+-> -> -> -> ->"->"->"->,->->
+-> -> -> -> ->t->o->o->l->s->=->[->f->i->l->e->_->r->e->a->d->e->r->_->t->o->o->l->]->->
+->)->->
+->->
+->#-> ->C->o->d->e-> ->Q->u->a->l->i->t->y-> ->A->g->e->n->t->->
+->c->o->d->e->_->q->u->a->l->i->t->y->_->a->g->e->n->t-> ->=-> ->A->g->e->n->t->(->->
+-> -> -> -> ->n->a->m->e->=->"->c->o->d->e->_->q->u->a->l->i->t->y->_->c->h->e->c->k->e->r->"->,->->
+-> -> -> -> ->m->o->d->e->l->=->M->O->D->E->L->_->N->A->M->E->,->->
+-> -> -> -> ->d->e->s->c->r->i->p->t->i->o->n->=->"->A->n->a->l->y->z->e->s-> ->c->o->d->e-> ->q->u->a->l->i->t->y->,-> ->r->u->n->s-> ->l->i->n->t->e->r->s->,-> ->m->e->a->s->u->r->e->s-> ->c->o->m->p->l->e->x->i->t->y->,-> ->a->n->d-> ->s->u->g->g->e->s->t->s-> ->r->e->f->a->c->t->o->r->i->n->g->.->"->,->->
+-> -> -> -> ->i->n->s->t->r->u->c->t->i->o->n->=->"->"->"->->
+-> -> -> -> ->Y->o->u-> ->a->r->e-> ->a-> ->S->e->n->i->o->r-> ->C->o->d->e-> ->R->e->v->i->e->w->e->r-> ->/-> ->T->e->c->h->n->i->c->a->l-> ->L->e->a->d->.->->
+-> -> -> -> ->Y->o->u->r-> ->g->o->a->l-> ->i->s-> ->t->o-> ->a->s->s->e->s->s-> ->c->o->d->e-> ->q->u->a->l->i->t->y-> ->a->n->d-> ->m->a->i->n->t->a->i->n->a->b->i->l->i->t->y->.->->
+-> -> -> -> ->->
+-> -> -> -> ->W->O->R->K->F->L->O->W->:->->
+-> -> -> -> ->1->.-> ->U->s->e-> ->'->r->e->a->d->_->c->o->d->e->_->f->i->l->e->'-> ->t->o-> ->i->n->s->p->e->c->t-> ->t->h->e-> ->t->a->r->g->e->t-> ->f->i->l->e->->
+-> -> -> -> ->2->.-> ->U->s->e-> ->'->r->u->n->_->p->y->l->i->n->t->_->a->n->a->l->y->s->i->s->'-> ->t->o-> ->c->h->e->c->k-> ->P->E->P-> ->8-> ->c->o->m->p->l->i->a->n->c->e->->
+-> -> -> -> ->3->.-> ->U->s->e-> ->'->r->u->n->_->r->a->d->o->n->_->c->o->m->p->l->e->x->i->t->y->'-> ->t->o-> ->m->e->a->s->u->r->e-> ->c->y->c->l->o->m->a->t->i->c-> ->c->o->m->p->l->e->x->i->t->y->->
+-> -> -> -> ->4->.-> ->S->y->n->t->h->e->s->i->z->e-> ->f->i->n->d->i->n->g->s-> ->i->n->t->o-> ->q->u->a->l->i->t->y-> ->r->e->p->o->r->t->->
+-> -> -> -> ->->
+-> -> -> -> ->C->R->I->T->I->C->A->L->:-> ->Y->o->u-> ->M->U->S->T-> ->r->e->t->u->r->n-> ->y->o->u->r-> ->q->u->a->l->i->t->y-> ->a->n->a->l->y->s->i->s-> ->a->s-> ->a-> ->f->o->r->m->a->t->t->e->d-> ->r->e->p->o->r->t-> ->t->o-> ->t->h->e-> ->d->e->l->e->g->a->t->i->n->g-> ->a->g->e->n->t->.->->
+-> -> -> -> ->->
+-> -> -> -> ->R->E->S->P->O->N->S->E-> ->F->O->R->M->A->T-> ->(->R->E->Q->U->I->R->E->D->)->:->->
+-> -> -> -> ->C->o->d->e-> ->Q->u->a->l->i->t->y-> ->R->e->p->o->r->t-> ->f->o->r-> ->[->f->i->l->e->n->a->m->e->]->:->->
+-> -> -> -> ->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->=->->
+-> -> -> -> ->->
+-> -> -> -> ->P->Y->L->I->N->T-> ->S->C->O->R->E->:-> ->X->.->X->/->1->0->->
+-> -> -> -> ->->
+-> -> -> -> ->C->O->M->P->L->E->X->I->T->Y-> ->A->N->A->L->Y->S->I->S->:->->
+-> -> -> -> ->--> ->F->u->n->c->t->i->o->n-> ->'->[->n->a->m->e->]->'->:-> ->G->r->a->d->e-> ->[->A->-->F->]->,-> ->C->o->m->p->l->e->x->i->t->y-> ->[->N->]->->
+-> -> -> -> ->->
+-> -> -> -> ->K->E->Y-> ->I->S->S->U->E->S->:->->
+-> -> -> -> ->1->.-> ->[->I->s->s->u->e-> ->d->e->s->c->r->i->p->t->i->o->n->]->->
+-> -> -> -> ->2->.-> ->[->I->s->s->u->e-> ->d->e->s->c->r->i->p->t->i->o->n->]->->
+-> -> -> -> ->->
+-> -> -> -> ->R->E->C->O->M->M->E->N->D->A->T->I->O->N->S->:->->
+-> -> -> -> ->--> ->[->S->p->e->c->i->f->i->c-> ->a->c->t->i->o->n->a->b->l->e-> ->i->m->p->r->o->v->e->m->e->n->t->]->->
+-> -> -> -> ->--> ->[->S->p->e->c->i->f->i->c-> ->a->c->t->i->o->n->a->b->l->e-> ->i->m->p->r->o->v->e->m->e->n->t->]->->
+-> -> -> -> ->->
+-> -> -> -> ->S->U->M->M->A->R->Y->:-> ->[->O->v->e->r->a->l->l-> ->a->s->s->e->s->s->m->e->n->t-> ->i->n-> ->1->-->2-> ->s->e->n->t->e->n->c->e->s->]->->
+-> -> -> -> ->->
+-> -> -> -> ->A->l->w->a->y->s-> ->p->r->o->v->i->d->e-> ->t->h->i->s-> ->c->o->m->p->l->e->t->e-> ->r->e->p->o->r->t-> ->--> ->t->h->e-> ->r->o->o->t-> ->a->g->e->n->t-> ->n->e->e->d->s-> ->i->t-> ->f->o->r-> ->c->o->m->p->r->e->h->e->n->s->i->v->e-> ->a->u->d->i->t->s->.->->
+-> -> -> -> ->"->"->"->,->->
+-> -> -> -> ->t->o->o->l->s->=->[->f->i->l->e->_->r->e->a->d->e->r->_->t->o->o->l->,-> ->p->y->l->i->n->t->_->t->o->o->l->,-> ->r->a->d->o->n->_->t->o->o->l->]->->
+->)->
