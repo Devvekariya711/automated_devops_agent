@@ -19,7 +19,7 @@ Imagine having **4 expert developers** working 24/7 to:
 **That's what this project does!**
 
 ---
-
+![Autonomous DevOps Workflow](images/workflow_diagram.png)
 ## 🏗️ How It Works (Visual Flow)
 <!-- 
 ```mermaid
@@ -62,6 +62,7 @@ graph TB
 | **Auto Testing** | Generates unit tests automatically | 🧪 |
 | **Smart Debugging** | Fixes bugs with retry logic + Stack Overflow search | 🐛 |
 | **GitHub Integration** | Reviews PRs, posts comments | 🔗 |
+![Key Features](images/features_grid.png)
 | **Memory System** | Remembers past fixes across sessions | 💾 |
 | **Cost Tracking** | Monitors API tokens & costs | 💰 |
 
@@ -264,6 +265,7 @@ cat logs/agent_activity.jsonl
 - 💰 **Cost Effective:** One system replaces manual reviews
 - 🎯 **Focus on Logic:** Agents handle the tedious checks
 
+![Before vs After](images/before_after.png)
 ---
 
 ## 📈 Real World Impact

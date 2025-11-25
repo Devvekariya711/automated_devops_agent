@@ -660,3 +660,248 @@ def execute_shell_command(command: str, timeout: int = 30) -> str:
 run_pytest_tool = FunctionTool(func=run_pytest)
 google_search_tool = FunctionTool(func=google_search)
 shell_executor_tool = FunctionTool(func=execute_shell_command)
+
+
+# ==============================================================================
+# Phase 2.5: Autonomous Self-Healing Fix Tool
+# ==============================================================================
+
+def attempt_autonomous_fix(target_file: str, test_file: str, proposed_code: str) -> str:
+    """
+    THE KILLER FEATURE: Autonomous Fix with Safety Net + Auto-Rollback.
+    
+    This is the core function that transforms the agent from a "read-only consultant"
+    to an autonomous engineer. It implements a safe backup→fix→test→rollback pipeline.
+    
+    Workflow:
+        1. Creates a .bak safety net (backup of original file)
+        2. Applies the proposed code fix
+        3. Runs the test suite to validate the fix
+        4. If tests PASS: Removes backup, keeps the fix ✅
+        5. If tests FAIL: Restores original code from backup, returns error logs ❌
+    
+    This ensures the agent NEVER leaves code in a broken state.
+    
+    Args:
+        target_file: Path to the file to fix (e.g., 'tests/demo/buggy_login.py')
+        test_file: Path to the test file to run (e.g., 'tests/demo/test_login.py')
+        proposed_code: The complete new file content (the fix)
+    
+    Returns:
+        str: Detailed success or failure message with test output
+    """
+    try:
+        # Validate paths exist
+        if not os.path.exists(target_file):
+            return f"❌ ERROR: Target file not found: {target_file}"
+        
+        if not os.path.exists(test_file):
+            return f"❌ ERROR: Test file not found: {test_file}"
+        
+        # Step 1: Create Safety Net (Backup)
+        backup_path = target_file + ".bak"
+        shutil.copy2(target_file, backup_path)
+        
+        # Step 2: Apply the Fix
+        try:
+            with open(target_file, 'w', encoding='utf-8') as f:
+                f.write(proposed_code)
+        except Exception as write_error:
+            # Restore immediately if write fails
+            shutil.copy2(backup_path, target_file)
+            os.remove(backup_path)
+            return f"❌ ERROR: Failed to write fix: {str(write_error)}"
+        
+        # Step 3: Verify with Tests
+        test_output = run_pytest(test_file, verbose=True)
+        
+        # Step 4: Decide - Keep or Rollback
+        if "passed" in test_output.lower() and "failed" not in test_output.lower():
+            # SUCCESS: Remove safety net, keep the fix
+            os.remove(backup_path)
+            
+            success_msg = "=" * 70 + "\n"
+            success_msg += "✅ SUCCESS: Autonomous Fix Applied!\n"
+            success_msg += "=" * 70 + "\n"
+            success_msg += f"Target File: {os.path.basename(target_file)}\n"
+            success_msg += f"Test File: {os.path.basename(test_file)}\n"
+            success_msg += f"Fix Size: {len(proposed_code)} characters\n"
+            success_msg += "\nTest Results:\n"
+            success_msg += "-" * 70 + "\n"
+            success_msg += test_output
+            success_msg += "\n" + "=" * 70 + "\n"
+            success_msg += "🎉 Code is now fixed and validated!\n"
+            success_msg += "=" * 70 + "\n"
+            
+            return success_msg
+        else:
+            # FAILURE: Rollback to original state
+            shutil.copy2(backup_path, target_file)
+            os.remove(backup_path)
+            
+            failure_msg = "=" * 70 + "\n"
+            failure_msg += "❌ FAILURE: Tests Failed - Automatic Rollback Executed\n"
+            failure_msg += "=" * 70 + "\n"
+            failure_msg += f"Target File: {os.path.basename(target_file)}\n"
+            failure_msg += f"Test File: {os.path.basename(test_file)}\n"
+            failure_msg += "\n🔄 Original code has been restored (no changes made)\n"
+            failure_msg += "\nTest Output (for debugging your next attempt):\n"
+            failure_msg += "-" * 70 + "\n"
+            failure_msg += test_output
+            failure_msg += "\n" + "=" * 70 + "\n"
+            failure_msg += "💡 Analyze the test output above and try a different approach.\n"
+            failure_msg += "=" * 70 + "\n"
+            
+            return failure_msg
+            
+    except Exception as e:
+        # Emergency rollback
+        if 'backup_path' in locals() and os.path.exists(backup_path):
+            shutil.copy2(backup_path, target_file)
+            os.remove(backup_path)
+        
+        return f"🚨 CRITICAL ERROR: {str(e)}\n🔄 Emergency rollback executed. Original code restored."
+
+        
+# Wrap autonomous fixer tool (Phase 2.5)
+auto_fixer_tool = FunctionTool(func=attempt_autonomous_fix)
+
+
+
+"""
+Phase 5: Memory & Sessions Tools
+
+Enables persistent context and learning across agent sessions.
+"""
+
+import json
+import os
+from pathlib import Path
+from datetime import datetime
+
+
+def read_project_memory() -> str:
+    """
+    Read project context from persistent memory file.
+    
+    Returns project-specific learnings, preferences, and context
+    that persist across agent sessions.
+    """
+    memory_file = Path("config/project_context.json")
+    
+    if not memory_file.exists():
+        return "No project memory found. Starting fresh session."
+    
+    try:
+        with open(memory_file, 'r', encoding='utf-8') as f:
+            context = json.load(f)
+        
+        output = "===== PROJECT MEMORY =====\n"
+        output += f"Project: {context.get('project_name', 'Unknown')}\n"
+        output += f"Last Updated: {context.get('last_updated', 'Never')}\n\n"
+        
+        if context.get('tech_stack'):
+            output += "Tech Stack: " + ", ".join(context['tech_stack']) + "\n\n"
+        
+        if context.get('key_files'):
+            output += "Key Files:\n"
+            for file, desc in context['key_files'].items():
+                output += f"  - {file}: {desc}\n"
+            output += "\n"
+        
+        if context.get('learnings'):
+            output += "Recent Learnings (last 5):\n"
+            for learning in context['learnings'][-5:]:
+                cat = learning.get('category', 'general')
+                desc = learning.get('description', '')
+                sol = learning.get('solution', '')
+                output += f"  - [{cat}] {desc}"
+                if sol:
+                    output += f" → {sol}"
+                output += "\n"
+            output += "\n"
+        
+        if context.get('preferences'):
+            output += "Preferences:\n"
+            for key, value in context['preferences'].items():
+                output += f"  - {key}: {value}\n"
+        
+        output += "=" * 50 + "\n"
+        return output
+        
+    except Exception as e:
+        return f"Error reading project memory: {str(e)}"
+
+
+def update_project_memory(
+    category: str,
+    description: str,
+    solution: str = ""
+) -> str:
+    """
+    Add a learning to project memory for cross-session persistence.
+    
+    This enables agents to build cumulative knowledge about:
+    - Bug fixes and solutions
+    - Code patterns discovered
+    - User preferences
+    - Project-specific conventions
+    
+    Args:
+        category: Type of learning (bug_fix, pattern, preference, refactoring)
+        description: What was learned or discovered
+        solution: How it was resolved (optional)
+    """
+    memory_file = Path("config/project_context.json")
+    
+    try:
+        # Load existing or create new
+        if memory_file.exists():
+            with open(memory_file, 'r', encoding='utf-8') as f:
+                context = json.load(f)
+        else:
+            context = {
+                "project_name": "automated_devops_agent",
+                "tech_stack": ["Python", "Google ADK", "pytest"],
+                "key_files": {
+                    "agent.py": "Root orchestrator agent",
+                    "supporting_agents.py": "Specialist agents",
+                    "tools.py": "All agent tools"
+                },
+                "learnings": [],
+                "preferences": {
+                   "max_retries": 5,
+                    "test_framework": "pytest",
+                    "linter": "pylint"
+                }
+            }
+        
+        # Add new learning
+        learning_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "category": category,
+            "description": description
+        }
+        
+        if solution:
+            learning_entry["solution"] = solution
+        
+        context["learnings"].append(learning_entry)
+        context["last_updated"] = datetime.now().isoformat()
+        
+        # Save
+        with open(memory_file, 'w', encoding='utf-8') as f:
+            json.dump(context, f, indent=2)
+        
+        return f"✅ Memory updated: {description}"
+        
+    except Exception as e:
+        return f"Error updating memory: {str(e)}"
+
+
+# Create tool wrappers
+from google.adk.tools import FunctionTool
+
+read_memory_tool = FunctionTool(func=read_project_memory)
+update_memory_tool = FunctionTool(func=update_project_memory)
+

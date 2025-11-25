@@ -7,7 +7,7 @@ from automated_devops_agent.tools import (
     google_search_tool,
     shell_executor_tool
 )
-from automated_devops_agent.memory_tools import read_memory_tool, update_memory_tool
+from automated_devops_agent.tools import read_memory_tool, update_memory_tool
 
 MODEL_NAME = "gemini-2.5-flash-lite"
 
