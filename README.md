@@ -289,16 +289,19 @@ def get_cost_summary():
 
 ---
 
-## 🚀 Quick Start (3 Steps)
+## 🚀 Quick Start (4 Steps)
 
 ```bash
-# 1️⃣ Install dependencies
+# 1️⃣clone your repository
+git clone https://github.com/Devvekariya711/automated_devops_agent.git
+
+# 2️⃣ Install dependencies
 pip install -r requirements.txt
 
-# 2️⃣ Set Gemini API key
+# 3️⃣ Set Gemini API key
 export GOOGLE_API_KEY="your_gemini_api_key_here"
 
-# 3️⃣ Launch agent web interface
+# 4️⃣ Launch agent web interface
 adk web
 ```
 
