@@ -698,22 +698,35 @@ def attempt_autonomous_fix(target_file: str, test_file: str, proposed_code: str)
         if not os.path.exists(test_file):
             return f"❌ ERROR: Test file not found: {test_file}"
         
+        # UI Indicator: Starting the fix
+        print(f"\n{'='*70}")
+        print(f"🛠️  ATTEMPTING AUTONOMOUS FIX on {os.path.basename(target_file)}...")
+        print(f"{'='*70}\n")
+        
         # Step 1: Create Safety Net (Backup)
+        print("📦 Creating backup...")
         backup_path = target_file + ".bak"
         shutil.copy2(target_file, backup_path)
+        print(f"✅ Backup created: {os.path.basename(backup_path)}\n")
         
         # Step 2: Apply the Fix
+        print("✏️  Applying code fix...")
         try:
             with open(target_file, 'w', encoding='utf-8') as f:
                 f.write(proposed_code)
+            print(f"✅ Fix applied ({len(proposed_code)} characters written)\n")
         except Exception as write_error:
             # Restore immediately if write fails
+            print("❌ Write failed! Restoring backup...\n")
             shutil.copy2(backup_path, target_file)
             os.remove(backup_path)
             return f"❌ ERROR: Failed to write fix: {str(write_error)}"
         
         # Step 3: Verify with Tests
+        print("🧪 RUNNING TESTS...")
+        print(f"{'─'*70}\n")
         test_output = run_pytest(test_file, verbose=True)
+        print(f"\n{'─'*70}")
         
         # Step 4: Decide - Keep or Rollback
         if "passed" in test_output.lower() and "failed" not in test_output.lower():
@@ -889,9 +902,16 @@ def update_project_memory(
         context["learnings"].append(learning_entry)
         context["last_updated"] = datetime.now().isoformat()
         
-        # Save
-        with open(memory_file, 'w', encoding='utf-8') as f:
+        # Save with atomic write (prevents corruption on interruption)
+        # Senior Dev Fix: Write to temp file first, then atomic rename
+        memory_file.parent.mkdir(parents=True, exist_ok=True)
+        temp_file = memory_file.with_suffix('.json.tmp')
+        
+        with open(temp_file, 'w', encoding='utf-8') as f:
             json.dump(context, f, indent=2)
+        
+        # Atomic operation - prevents corruption
+        os.replace(str(temp_file), str(memory_file))
         
         return f"✅ Memory updated: {description}"
         

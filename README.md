@@ -88,6 +88,39 @@ adk web
 
 ---
 
+## ⚠️ SECURITY WARNING
+
+> **🚨 CRITICAL: This Agent Executes Generated Code**
+>
+> The Automated DevOps Agent has the ability to:
+> - ✏️ **Write code** to files in your project
+> - 🧪 **Execute tests** which run Python code automatically
+> - 🐛 **Apply fixes** that are immediately validated
+>
+> **This is powerful BUT potentially dangerous!**
+>
+> ### ✅ Safe Usage:
+> - Run on trusted code repositories only
+> - Use inside a **Virtual Machine (VM)** or Docker container
+> - Review the `attempt_autonomous_fix` function before use
+> - Always have version control (git) for easy rollback
+> - Test in development environments first
+>
+> ### ❌ NEVER:
+> - Run on production servers directly
+> - Execute on untrusted/unknown code
+> - Give access to sensitive system directories
+> - Run with elevated privileges (sudo/admin)
+>
+> **By using this agent, you acknowledge:**
+> - The agent generates and executes code
+> - You understand the security implications
+> - You take responsibility for running it in a safe environment
+>
+> *For more details, see the "Autonomous Fix Safety" section below.*
+
+---
+
 ## 📁 Project Structure (Simple!)
 
 ```

@@ -1,6 +1,6 @@
 {
   "project_name": "automated_devops_agent",
-  "last_updated": "2024-11-24T21:53:00+05:30",
+  "last_updated": "2025-11-26T14:06:49+05:30",
   "tech_stack": [
     "Python",
     "Google ADK",
@@ -14,6 +14,29 @@
     "supporting_agents.py": "Specialist agents (Test, Debug, Security, Quality)",
     "tools.py": "All agent tools including memory, GitHub API, testing",
     "pipelines.py": "RefactoringPipeline and IterativeDebugger classes"
+  },
+  "coding_standards": {
+    "framework": "pytest",
+    "style": "PEP 8",
+    "linter": "pylint",
+    "complexity_tool": "radon",
+    "max_complexity_grade": "C",
+    "min_pylint_score": 7.0,
+    "forbidden_functions": [
+      "eval",
+      "exec",
+      "compile",
+      "__import__",
+      "os.system",
+      "subprocess.call with shell=True"
+    ],
+    "required_practices": [
+      "Use parameterized queries for SQL (no string concatenation)",
+      "Validate all user inputs",
+      "Use context managers for file operations",
+      "Include docstrings for all public functions",
+      "Write unit tests for all new features"
+    ]
   },
   "learnings": [
     {
@@ -33,12 +56,18 @@
       "category": "pattern",
       "description": "Iterative debugging with retry loop (max 5 attempts)",
       "solution": "IterativeDebugger runs tests, analyzes errors, searches solutions, applies fixes iteratively"
+    },
+    {
+      "timestamp": "2025-11-26T14:06:49+05:30",
+      "category": "bug_fix",
+      "description": "Implemented atomic write protection for JSON corruption",
+      "solution": "Use temp file + os.replace() pattern to prevent corruption during interruption"
     }
   ],
   "common_patterns": {
     "test_location": "tests/",
     "fixture_location": "tests/fixtures/",
-    "main_module": "devops_automator/",
+    "main_module": "automated_devops_agent/",
     "agent_model": "gemini-2.5-flash-lite"
   },
   "preferences": {
@@ -46,6 +75,28 @@
     "test_framework": "pytest",
     "linter": "pylint",
     "complexity_tool": "radon",
-    "git_enabled": true
+    "git_enabled": true,
+    "auto_backup": true,
+    "verbose_output": true
+  },
+  "best_practices": {
+    "security": [
+      "Always use prepared statements for database queries",
+      "Never hardcode API keys or secrets",
+      "Validate and sanitize all inputs",
+      "Use safe deserialization methods"
+    ],
+    "code_quality": [
+      "Keep functions under 50 lines",
+      "Maximum cyclomatic complexity: Grade C (11-20)",
+      "Prefer composition over inheritance",
+      "Use type hints for function parameters"
+    ],
+    "testing": [
+      "Minimum 80% code coverage",
+      "Test edge cases and error conditions",
+      "Use fixtures for test data",
+      "Mock external dependencies"
+    ]
   }
 }
