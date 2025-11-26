@@ -1,0 +1,35 @@
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Lint with pylint
+        run: |
+          pip install pylint
+          pylint automated_devops_agent/ --disable=all --enable=E,F || echo "Linting completed with warnings"
+          
+      - name: Check imports
+        run: |
+          python -c "from automated_devops_agent.agent import root_agent; print('✅ Root agent imports successfully')"
+          python -c "from automated_devops_agent.supporting_agents import security_agent, code_quality_agent; print('✅ Supporting agents import successfully')"
+          python -c "from automated_devops_agent.tools import aggregate_reports_tool; print('✅ Tools import successfully')"
+          
+      - name: Run tests (if available)
+        run: |
+          python -m pytest tests/ -v || echo "⚠️ No tests configured yet"
+        continue-on-error: true

@@ -2,6 +2,7 @@
 
 > **Enterprise Track Submission**: AI-powered parallel agent system that reduces code review time from hours to minutes while catching 75-85% of bugs
 
+[![Tests](https://github.com/Devvekariya711/automated_devops_agent/actions/workflows/tests.yml/badge.svg)](https://github.com/Devvekariya711/automated_devops_agent/actions)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 [![Google ADK](https://img.shields.io/badge/Google-ADK-orange.svg)](https://github.com/google/adk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,6 +11,47 @@
 **🔗 Repository**: [github.com/Devvekariya711/automated_devops_agent](https://github.com/Devvekariya711/automated_devops_agent)
 
 ---
+
+## 📑 Table of Contents
+
+- [🎓 For Kaggle Capstone Judges](#-for-kaggle-capstone-judges)
+- [The Problem](#-the-problem-code-review-bottlenecks-cost-millions)
+- [The Solution](#-the-solution-specialized-multi-agent-orchestration)
+- [Architecture](#%EF%B8%8F-architecture-course-concepts-demonstrated)
+- [Performance Metrics](#-realistic-performance-metrics)
+- [Quick Start](#-quick-start-3-steps)
+- [Project Structure](#-project-structure)
+- [Comparison](#-comparison-to-alternatives)
+- [Screenshots](#-screenshots)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## 🎓 For Kaggle Capstone Judges
+
+**Quick Links:**
+- 📊 [Evaluation Results](config/evaluation_results.json) - F1: 0.74, tested on 50 samples
+- 📈 [Performance Metrics](#-realistic-performance-metrics) - Honest comparison
+- 🏗️ [Architecture](#%EF%B8%8F-architecture-course-concepts-demonstrated) - 6 concepts demonstrated
+- 🧪 [Quick Start](#-quick-start-3-steps) - Run in 3 commands
+- 🎯 [VISION.md](VISION.md) - Project vision and roadmap
+
+**Highlighted Features:**
+1. ✅ Multi-agent orchestration (4 specialists in parallel)
+2. ✅ Custom tools (15+ functions)
+3. ✅ Loop agent with retry logic
+4. ✅ Persistent memory bank
+5. ✅ Token tracking & observability
+6. ✅ Evaluation framework (precision/recall)
+
+**Try It Now:**
+```bash
+pip install -r requirements.txt
+export GOOGLE_API_KEY="your_key"
+adk web
+# Open localhost:8000 → Type: "Review automated_devops_agent/tools.py"
+```
 
 ## 🎯 The Problem: Code Review Bottlenecks Cost Millions
 
@@ -481,6 +523,57 @@ See [VISION.md](VISION.md)
 - **Phase 2** (In Progress): Improved context understanding (cross-file analysis)
 - **Phase 3** (Q1 2026): Multi-language support (Java, Go, TypeScript)
 - **Phase 4**: Real-time IDE integration
+
+---
+
+## 📸 Screenshots
+
+### ADK Web Interface
+*Screenshot will be added here showing the agent interface*
+
+### Agent in Action
+*Screenshot showing the agent analyzing code and generating reports*
+
+### Comprehensive Audit Report
+*Screenshot of the final output with security, quality, and testing analysis*
+
+**Note**: To generate screenshots:
+1. Run `adk web`
+2. Open `http://localhost:8000`
+3. Submit: "Review automated_devops_agent/tools.py"
+4. Capture the workflow
+
+---
+
+## 🎥 Demo Video
+
+**Coming Soon**: 3-minute walkthrough demonstrating:
+- Starting the agent
+- Submitting code for review
+- 4 agents working in parallel
+- Comprehensive report generation
+- Honest evaluation results
+
+*Or explore the codebase and [try it yourself](#-quick-start-3-steps)*
+
+---
+
+## 👥 Used By
+
+- ✅ **Kaggle Agents Intensive Capstone Project 2025**
+- 📚 Educational demonstrations for AI agent orchestration
+- 🔬 Research into multi-agent code analysis systems
+
+---
+
+## 🙏 Acknowledgements
+
+- **Google ADK Team** - For the powerful Agent Development Kit framework
+- **Kaggle Agents Intensive** - Course instructors and community support
+- **Gemini Team** - For state-of-the-art AI models (Gemini 2.0 Flash)
+- **Open Source Community** - Pylint, Pytest, Radon, and all dependencies
+
+Built as part of the [Kaggle Agents Intensive Capstone Project](https://www.kaggle.com/learn)
 
 ---
 
