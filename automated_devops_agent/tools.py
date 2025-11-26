@@ -1,11 +1,13 @@
 import os
 import subprocess
+import shutil
 import io
 from contextlib import redirect_stdout
 from google.adk.tools import FunctionTool
 from pylint import lint
 from pylint.reporters.text import TextReporter
 from radon.complexity import cc_visit
+
 
 
 def read_code_file(file_path: str) -> str:
@@ -408,7 +410,6 @@ def write_code_file(file_path: str, content: str) -> str:
             return "Error: Access denied. Can only write within project directory."
         
         # Create backup if file exists
-        import shutil
         backup_created = False
         if os.path.exists(requested_path):
             backup_path = requested_path + '.backup'

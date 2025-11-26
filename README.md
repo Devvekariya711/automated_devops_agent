@@ -127,21 +127,20 @@ adk web
 automated_devops_agent/
 ├── 📦 automated_devops_agent/    # All code here (7 files)
 │   ├── agent.py                  # 🎯 Root orchestrator
-│   ├── supporting_agents.py      # 👥 4 specialists
-│   ├── tools.py                  # 🛠️ All tools
-│   ├── pipelines.py              # 🔄 Workflows
-│   ├── memory_tools.py           # 💾 Memory system
-│   ├── logger.py                 # 📊 Token tracking
-│   └── evaluate_agents.py        # 📈 Evaluation
+│   ├── supporting_agents.py      # 👥 4 specialists  
+│   ├── tools.py                  # 🛠️ All tools (file ops, analysis, memory)
+│   ├── pipelines.py              # 🔄 Refactoring & debugging workflows
+│   ├── logger.py                 # 📊 Token tracking & cost monitoring
+│   └── evaluate_agents.py        # 📈 Performance evaluation
 │
 ├── 🧪 tests/                     # Test suite
-├── ⚙️ config/                    # Settings
-├── 📜 logs/                      # Generated logs
+├── ⚙️ config/                    # Settings & project context
+├── 📜 logs/                      # Generated logs (token usage)
 ├── 📖 README.md                  # This file
 └── 📋 requirements.txt           # Dependencies
 ```
 
-**Just 7 files! No complicated folders!**
+**Just 6 main files! Clean and organized!**
 
 ---
 

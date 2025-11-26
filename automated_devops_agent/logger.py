@@ -268,3 +268,10 @@ def get_logger() -> AgentLogger:
     if _global_logger is None:
         _global_logger = AgentLogger()
     return _global_logger
+
+
+# Export as ADK tools for agent use
+from google.adk.tools import FunctionTool
+
+view_logs_tool = FunctionTool(func=view_recent_logs)
+cost_summary_tool = FunctionTool(func=get_cost_summary)

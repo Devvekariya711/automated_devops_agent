@@ -417,7 +417,7 @@ class IterativeDebugger:
         """
         try:
             # Use run_pytest from tools
-            from devops_automator.tools import run_pytest
+            from automated_devops_agent.tools import run_pytest
             
             result_str = run_pytest(str(self.test_file), verbose=True)
             
@@ -490,7 +490,7 @@ class IterativeDebugger:
             str: Search results or empty string
         """
         try:
-            from devops_automator.tools import google_search
+            from automated_devops_agent.tools import google_search
             
             # Build search query
             error_type = error_analysis.get("error_type", "")
