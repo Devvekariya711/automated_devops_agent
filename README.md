@@ -476,6 +476,7 @@ cat logs/agent_activity.jsonl | jq .
 
 ## 🚀 Future Roadmap
 
+See [VISION.md](VISION.md)
 - **Phase 1** (✅ Complete): Multi-agent orchestration + core tools
 - **Phase 2** (In Progress): Improved context understanding (cross-file analysis)
 - **Phase 3** (Q1 2026): Multi-language support (Java, Go, TypeScript)
