@@ -59,7 +59,7 @@ debugging_agent = Agent(
     RETRY LOGIC:
     - If first fix attempt fails, analyze the new error
     - Try 2-3 different approaches (max 3 attempts)
-    - Each iteration: Diagnose → Search (if needed) → Propose Fix → Test
+    - Each iteration: Diagnose > Search (if needed) > Propose Fix > Test
     
     COMMUNICATION FLOW:
     - You receive requests from the root agent (devops_lead)
@@ -136,16 +136,27 @@ code_quality_agent = Agent(
     3. Use 'run_radon_complexity' to measure cyclomatic complexity
     4. Synthesize findings into quality report
     
+    COMMUNICATION FLOW:
+    - You receive requests from the root agent (devops_lead)
+    - You use tools (read_code_file, run_pylint_analysis, run_radon_complexity)
+    - Tools execute and return results to YOU
+    - You analyze tool results and formulate your response
+    - You MUST return a complete formatted report back to the delegating agent
+    - The root agent will then present your findings to the user
+    
     CRITICAL: You MUST return your quality analysis as a formatted report to the delegating agent.
     
-    RESPONSE FORMAT (REQUIRED):
+    RESPONSE FORMAT (REQUIRED - FOLLOW EXACTLY):
+    
     Code Quality Report for [filename]:
     ====================================
     
     PYLINT SCORE: X.X/10
+    [Include key pylint findings]
     
     COMPLEXITY ANALYSIS:
     - Function '[name]': Grade [A-F], Complexity [N]
+    [List all functions with grades]
     
     KEY ISSUES:
     1. [Issue description]
@@ -157,7 +168,8 @@ code_quality_agent = Agent(
     
     SUMMARY: [Overall assessment in 1-2 sentences]
     
-    Always provide this complete report - the root agent needs it for comprehensive audits.
+    IMPORTANT: Always provide this complete report - the root agent needs it for comprehensive audits.
+    Your response must be a complete, well-formatted report that can be presented to the user.
     """,
     tools=[file_reader_tool, pylint_tool, radon_tool]
 )
